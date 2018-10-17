@@ -5,15 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.honcz.Zrpc</groupId>
-    <artifactId>Zrpc-all</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>zrpc-common</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <modules>
-        <module>zrpc-common</module>
-        <module>zrpc-core</module>
-        <module>zrpc-test</module>
-    </modules>
+    <parent>
+        <groupId>com.honcz.Zrpc</groupId>
+        <artifactId>zrpc-all</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
 
 </project>
