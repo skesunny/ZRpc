@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/zrpc.iml" filepath="$PROJECT_DIR$/.idea/zrpc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-common/zrpc-common.iml" filepath="$PROJECT_DIR$/zrpc-common/zrpc-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-core/zrpc-core.iml" filepath="$PROJECT_DIR$/zrpc-core/zrpc-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-registry/zrpc-registry.iml" filepath="$PROJECT_DIR$/zrpc-registry/zrpc-registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-test/zrpc-test.iml" filepath="$PROJECT_DIR$/zrpc-test/zrpc-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-test/zrpc-test-api/zrpc-test-api.iml" filepath="$PROJECT_DIR$/zrpc-test/zrpc-test-api/zrpc-test-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-test/zrpc-test-client/zrpc-test-client.iml" filepath="$PROJECT_DIR$/zrpc-test/zrpc-test-client/zrpc-test-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zrpc-test/zrpc-test-server/zrpc-test-server.iml" filepath="$PROJECT_DIR$/zrpc-test/zrpc-test-server/zrpc-test-server.iml" />
+    </modules>
+  </component>
+</project>

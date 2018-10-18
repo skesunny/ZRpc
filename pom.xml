@@ -19,6 +19,7 @@
         <module>zrpc-common</module>
         <module>zrpc-core</module>
         <module>zrpc-test</module>
+        <module>zrpc-registry</module>
     </modules>
 
 
