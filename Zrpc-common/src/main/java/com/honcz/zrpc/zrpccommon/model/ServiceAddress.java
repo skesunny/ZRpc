@@ -1,7 +1,8 @@
-package com.honcz.zrpc.zrpccommon;
+package com.honcz.zrpc.zrpccommon.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 服务所在地址

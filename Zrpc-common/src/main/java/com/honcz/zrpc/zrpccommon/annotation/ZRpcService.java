@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpccore.annotation;
+package com.honcz.zrpc.zrpccommon.annotation;
 
 import org.springframework.stereotype.Component;
 

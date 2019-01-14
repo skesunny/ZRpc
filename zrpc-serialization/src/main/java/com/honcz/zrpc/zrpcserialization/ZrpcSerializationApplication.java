@@ -1,13 +1,12 @@
-package com.honcz.server.zrpcserver;
+package com.honcz.zrpc.zrpcserialization;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class ZrpcServerApplication {
+public class ZrpcSerializationApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ZrpcServerApplication.class, args);
+        SpringApplication.run(ZrpcSerializationApplication.class, args);
     }
 }

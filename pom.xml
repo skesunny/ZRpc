@@ -20,6 +20,8 @@
         <module>zrpc-core</module>
         <module>zrpc-test</module>
         <module>zrpc-registry</module>
+        <module>zrpc-serialization</module>
+        <module>zrpc-loadbalance</module>
     </modules>
 
 

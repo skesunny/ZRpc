@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>zrpc-loadbalance</artifactId>
+    <packaging>jar</packaging>
+
+    <name>zrpc-loadbalance</name>
+    <description>负载均衡实现</description>
+
     <parent>
         <artifactId>Zrpc-all</artifactId>
         <groupId>com.honcz.Zrpc</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>zrpc-core</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
         <!--lombok -->
@@ -23,23 +28,12 @@
             <artifactId>lombok</artifactId>
             <version>1.16.22</version>
         </dependency>
+
         <dependency>
             <groupId>com.honcz.Zrpc</groupId>
-            <artifactId>zrpc-registry</artifactId>
+            <artifactId>zrpc-common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.honcz.Zrpc</groupId>
-            <artifactId>zrpc-serialization</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.30.Final</version>
         </dependency>
     </dependencies>
 

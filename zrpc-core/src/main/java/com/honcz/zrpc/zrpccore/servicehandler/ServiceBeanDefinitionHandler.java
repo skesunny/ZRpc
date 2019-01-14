@@ -1,7 +1,10 @@
-package com.honcz.zrpc.zrpccore;
+package com.honcz.zrpc.zrpccore.servicehandler;
 
 import com.honcz.zrpc.zrpccore.annotation.EnableRPCClients;
-import com.honcz.zrpc.zrpccore.annotation.ZRpcService;
+import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
+import com.honcz.zrpc.zrpcregistry.ServiceDiscovery;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -12,10 +15,11 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
@@ -24,8 +28,11 @@ import java.util.Set;
 
 /**
  * 将提供服务的interface接口作为bean注入到spring bean容器
- * 1.首先获取注解了@ZRpcService的接口
- * 2.通过在bean加载器中增加一条bean注入规则，将接口bean注入
+ * 整体思路：
+ * 1.通过启动类上@RPCclients注解中的value属性，找到引用api的路径。
+ * 2.通过api路径，找到api包中，所有用了@RPCservice注解的接口。
+ * 3.拿到这些接口注入到bean工厂中的元数据metadata，拿到它们的classname。
+ * 4.动态生成ProxyFactoryBean,将classname和一个ServiceDiscovery实例交给ProxyFactoryBean进行代理。
  *
  * 解释：BeanDefinitionRegistryPostProcessor：
  *
@@ -34,7 +41,11 @@ import java.util.Set;
  * @date 2018/10/18
  */
 @Slf4j
+@RequiredArgsConstructor
 public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostProcessor {
+    @NonNull
+    private ServiceDiscovery serviceDiscovery;
+
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         log.info("开始注入bean");
@@ -53,9 +64,8 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
                     BeanDefinitionHolder holder = createBeanDefinition(annotationMetadata);
                     BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
                 }
-            }
         }
-
+        }
     }
 
     @Override
@@ -98,7 +108,6 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
 
         BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(ProxyFactoryBean.class);
         String beanName = StringUtils.uncapitalize(className.substring(className.lastIndexOf('.') + 1));
-
         definition.addPropertyValue("type", className);
         definition.addPropertyValue("serviceDiscovery", serviceDiscovery);
 

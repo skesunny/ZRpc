@@ -1,6 +1,6 @@
 package com.honcz.zrpc.zrpcregistry;
 
-import com.honcz.zrpc.zrpccommon.ServiceAddress;
+import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
 
 /**
  * 服务注册接口
@@ -14,5 +14,5 @@ public interface ServiceRegistry {
      * @param serviceName
      * @param serviceAddress
      */
-    void register(String serviceName, ServiceAddress serviceAddress);
+    void serviceRegister(String serviceName, ServiceAddress serviceAddress);
 }
