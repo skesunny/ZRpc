@@ -1,4 +1,4 @@
-//package com.honcz.zrpc.zrpcregistry.eurekaservice;
+//package com.honcz.zrpc.zrpccore.eurekaservice;
 //
 //import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
 //import com.honcz.zrpc.zrpcregistry.ServiceRegistry;

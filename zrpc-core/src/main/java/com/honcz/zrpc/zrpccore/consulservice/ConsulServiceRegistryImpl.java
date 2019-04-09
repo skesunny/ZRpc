@@ -1,10 +1,10 @@
-package com.honcz.zrpc.zrpcregistry.consulservice;
+package com.honcz.zrpc.zrpccore.consulservice;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.ConsulRawClient;
 import com.ecwid.consul.v1.agent.model.NewService;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
-import com.honcz.zrpc.zrpcregistry.ServiceRegistry;
+import com.honcz.zrpc.zrpccore.ServiceRegistry;
 
 import java.util.ArrayList;
 

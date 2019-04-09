@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpcregistry.consulservice;
+package com.honcz.zrpc.zrpccore.consulservice;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.ConsulRawClient;
@@ -8,8 +8,10 @@ import com.ecwid.consul.v1.health.model.HealthService;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
 import com.honcz.zrpc.zrpcloadbalance.LoadBalancer;
 import com.honcz.zrpc.zrpcloadbalance.impl.RandomLoadBalancer;
-import com.honcz.zrpc.zrpcregistry.ServiceDiscovery;
+import com.honcz.zrpc.zrpccore.ServiceDiscovery;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -21,21 +23,32 @@ import java.util.stream.Collectors;
  * Created on 21/10/2017
  */
 @Slf4j
+@Component
 public class ConsulServiceDiscoveryImpl implements ServiceDiscovery {
+	@Value("${spring.cloud.consul.host}")
+	private String consulHost;
+
+	@Value("${spring.cloud.consul.port}")
+	private String consulPort;
 
 	private ConsulClient consulClient;
 
 	Map<String, LoadBalancer<ServiceAddress>> loadBalancerMap = new ConcurrentHashMap<>();
 
-	public ConsulServiceDiscoveryImpl(String consulAddress) {
-		log.debug("Use consul to do service discovery: {}", consulAddress);
-		String[] address = consulAddress.split(":");
-		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));
-		consulClient = new ConsulClient(rawClient);
-	}
+//	public ConsulServiceDiscoveryImpl(String consulAddress) {
+//		log.debug("Use consul to do service discovery: {}", consulAddress);
+//		String[] address = consulAddress.split(":");
+//		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));
+//		consulClient = new ConsulClient(rawClient);
+//	}
 
 	@Override
 	public String serviceDiscory(String serviceName) {
+		String discoveryAddress = consulHost+":"+consulPort;
+		log.debug("Use consul to do service discovery: {}", discoveryAddress);
+		String[] address = discoveryAddress.split(":");
+		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));
+		consulClient = new ConsulClient(rawClient);
 		List<HealthService> healthServices;
 		if (!loadBalancerMap.containsKey(serviceName)) {
 			healthServices = consulClient.getHealthServices(serviceName, true, QueryParams.DEFAULT)
@@ -46,12 +59,12 @@ public class ConsulServiceDiscoveryImpl implements ServiceDiscovery {
 			longPolling(serviceName);
 		}
 
-		ServiceAddress address = loadBalancerMap.get(serviceName).next();
+		ServiceAddress loadBalAddress = loadBalancerMap.get(serviceName).next();
 		if (address == null) {
 			throw new RuntimeException(String.format("No service instance for %s", serviceName));
 		}
 
-		return address.toString();
+		return loadBalAddress.toString();
 	}
 
 	private void longPolling(String serviceName){

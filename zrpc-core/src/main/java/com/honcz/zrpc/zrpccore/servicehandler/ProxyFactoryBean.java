@@ -5,7 +5,7 @@ import com.honcz.zrpc.zrpccommon.model.RPCResponse;
 import com.honcz.zrpc.zrpccore.netty.ChannelManager;
 import com.honcz.zrpc.zrpccore.netty.RPCResponseFuture;
 import com.honcz.zrpc.zrpccore.netty.ResponseFutureManager;
-import com.honcz.zrpc.zrpcregistry.ServiceDiscovery;
+import com.honcz.zrpc.zrpccore.ServiceDiscovery;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.Data;

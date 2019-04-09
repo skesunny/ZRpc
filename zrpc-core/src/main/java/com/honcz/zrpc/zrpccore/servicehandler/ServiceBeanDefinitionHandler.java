@@ -2,7 +2,7 @@ package com.honcz.zrpc.zrpccore.servicehandler;
 
 import com.honcz.zrpc.zrpccore.annotation.EnableRPCClients;
 import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
-import com.honcz.zrpc.zrpcregistry.ServiceDiscovery;
+import com.honcz.zrpc.zrpccore.ServiceDiscovery;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,12 @@ import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,38 +33,38 @@ import java.util.Set;
  * 2.通过api路径，找到api包中，所有用了@RPCservice注解的接口。
  * 3.拿到这些接口注入到bean工厂中的元数据metadata，拿到它们的classname。
  * 4.动态生成ProxyFactoryBean,将classname和一个ServiceDiscovery实例交给ProxyFactoryBean进行代理。
- *
+ * <p>
  * 解释：BeanDefinitionRegistryPostProcessor：
- *
  *
  * @author honc.z
  * @date 2018/10/18
  */
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostProcessor {
-    @NonNull
-    private ServiceDiscovery serviceDiscovery;
+//    @NonNull
+//    private ServiceDiscovery serviceDiscovery;
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         log.info("开始注入bean");
         //拿到类目录bean扫描器
-        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+        ClassPathScanningCandidateComponentProvider scanner = this.getScanner();
         //增加一个注解过滤器
         scanner.addIncludeFilter(new AnnotationTypeFilter(ZRpcService.class));
         //告诉bean加载器扫描注解的位置
-        for (String apiPackages : getApiPackages()){
+        for (String apiPackages : getApiPackages()) {
             //拿到路径下申请组件者的Bean set集合
             Set<BeanDefinition> candidateComponents = scanner.findCandidateComponents(apiPackages);
-            for (BeanDefinition candidateComponent : candidateComponents){
-                if (candidateComponent instanceof AnnotatedBeanDefinition){
+            for (BeanDefinition candidateComponent : candidateComponents) {
+                if (candidateComponent instanceof AnnotatedBeanDefinition) {
                     AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                     AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
                     BeanDefinitionHolder holder = createBeanDefinition(annotationMetadata);
                     BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
                 }
-        }
+            }
         }
     }
 
@@ -75,6 +75,7 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
 
     /**
      * 将引用包路径放入一个无序不重复的set
+     *
      * @return
      */
     private Set<String> getApiPackages() {
@@ -87,15 +88,16 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
 
     /**
      * 通过反射拿到系统变量中的mainclass
+     *
      * @return
      */
-    private Class<?> getMainClass(){
+    private Class<?> getMainClass() {
         if (null != System.getProperty("sun.java.command")) {
             String mainClass = System.getProperty("sun.java.command");
             log.debug("Main class: {}", mainClass);
             try {
                 return Class.forName(mainClass);
-            }catch (ClassNotFoundException e){
+            } catch (ClassNotFoundException e) {
                 throw new IllegalStateException("Cannot determine main class.");
             }
         }
@@ -109,8 +111,33 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
         BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(ProxyFactoryBean.class);
         String beanName = StringUtils.uncapitalize(className.substring(className.lastIndexOf('.') + 1));
         definition.addPropertyValue("type", className);
-        definition.addPropertyValue("serviceDiscovery", serviceDiscovery);
+//        definition.addPropertyValue("serviceDiscovery", serviceDiscovery);
 
         return new BeanDefinitionHolder(definition.getBeanDefinition(), beanName);
+    }
+
+    private ClassPathScanningCandidateComponentProvider getScanner() {
+        return new ClassPathScanningCandidateComponentProvider(false) {
+            @Override
+            protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+                if (beanDefinition.getMetadata().isIndependent()) {
+                    if (beanDefinition.getMetadata().isInterface()
+                            && beanDefinition.getMetadata().getInterfaceNames().length == 1
+                            && Annotation.class.getName().equals(beanDefinition.getMetadata().getInterfaceNames()[0])) {
+
+                        try {
+                            Class<?> target = Class.forName(beanDefinition.getMetadata().getClassName());
+                            return !target.isAnnotation();
+                        } catch (Exception ex) {
+
+                            log.error("Could not load target class: {}, {}",
+                                    beanDefinition.getMetadata().getClassName(), ex);
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        };
     }
 }

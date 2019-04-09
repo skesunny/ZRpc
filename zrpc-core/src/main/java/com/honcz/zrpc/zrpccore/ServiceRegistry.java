@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpcregistry;
+package com.honcz.zrpc.zrpccore;
 
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
 
