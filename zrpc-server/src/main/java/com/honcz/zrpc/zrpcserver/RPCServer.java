@@ -4,6 +4,7 @@ import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
+import com.honcz.zrpc.zrpccore.consulservice.ConsulServiceRegistryImpl;
 import com.honcz.zrpc.zrpcserialization.coder.RPCDecoder;
 import com.honcz.zrpc.zrpcserialization.coder.RPCEncoder;
 import com.honcz.zrpc.zrpcserialization.serialization.impl.ProtobufSerializer;
@@ -39,7 +40,7 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
     @NonNull
     private int serverPort;
 	@NonNull
-	private ServiceRegistry serviceRegistry;
+	private ConsulServiceRegistryImpl serviceRegistry;
 
 	private Map<String, Object> handlerMap = new HashMap<>();
 

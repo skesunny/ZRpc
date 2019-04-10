@@ -6,10 +6,11 @@ spring:
        discovery:
          health-check-path: /actuator/health
          health-check-interval: 10s
-         tags: urlprefix-/client
+         tags: urlprefix-/server
          prefer-ip-address: true
+
   application:
-    name: client
+    name: server
 
 server:
-  port: 8082
+  port: 8081
