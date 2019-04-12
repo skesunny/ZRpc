@@ -1,12 +1,11 @@
-package com.honcz.zrpc.zrpccore.consulservice;
+package com.honcz.zrpc.zrpccore.servicecenter.consulservice;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.ConsulRawClient;
 import com.ecwid.consul.v1.agent.model.NewService;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
-import com.honcz.zrpc.zrpccore.ServiceRegistry;
+import com.honcz.zrpc.zrpccore.servicecenter.ServiceRegistry;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
@@ -16,11 +15,11 @@ import java.util.ArrayList;
  */
 
 public class ConsulServiceRegistryImpl implements ServiceRegistry {
-//	@Value("${spring.cloud.consul.host}")
-//	private String consulHost;
-//
-//	@Value("${spring.cloud.consul.port}")
-//	private String consulPort;
+	@Value("${spring.cloud.consul.host}")
+	private String consulHost;
+
+	@Value("${spring.cloud.consul.port}")
+	private String consulPort;
 
 	private ConsulClient consulClient;
 

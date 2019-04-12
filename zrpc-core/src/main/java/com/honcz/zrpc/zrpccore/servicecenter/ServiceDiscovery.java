@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpccore;
+package com.honcz.zrpc.zrpccore.servicecenter;
 
 /**
  * 服务发现接口

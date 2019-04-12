@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpccore.consulservice;
+package com.honcz.zrpc.zrpccore.servicecenter.consulservice;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.ConsulRawClient;
@@ -8,10 +8,9 @@ import com.ecwid.consul.v1.health.model.HealthService;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
 import com.honcz.zrpc.zrpcloadbalance.LoadBalancer;
 import com.honcz.zrpc.zrpcloadbalance.impl.RandomLoadBalancer;
-import com.honcz.zrpc.zrpccore.ServiceDiscovery;
+import com.honcz.zrpc.zrpccore.servicecenter.ServiceDiscovery;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -23,28 +22,29 @@ import java.util.stream.Collectors;
  * Created on 21/10/2017
  */
 @Slf4j
-@Component
+@Data
 public class ConsulServiceDiscoveryImpl implements ServiceDiscovery {
-	@Value("${spring.cloud.consul.host}")
-	private String consulHost;
+//	@Value("${spring.cloud.consul.host}")
+//	private String consulHost;
+//
+//	@Value("${spring.cloud.consul.port}")
+//	private String consulPort;
 
-	@Value("${spring.cloud.consul.port}")
-	private String consulPort;
+	public String discoveryAddress;
 
 	private ConsulClient consulClient;
 
 	Map<String, LoadBalancer<ServiceAddress>> loadBalancerMap = new ConcurrentHashMap<>();
 
-//	public ConsulServiceDiscoveryImpl(String consulAddress) {
-//		log.debug("Use consul to do service discovery: {}", consulAddress);
-//		String[] address = consulAddress.split(":");
-//		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));
-//		consulClient = new ConsulClient(rawClient);
-//	}
+	public ConsulServiceDiscoveryImpl(String consulAdress) {
+		log.debug("Use consul to do service discovery: {}", consulAdress);
+		String[] address = consulAdress.split(":");
+		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));
+		consulClient = new ConsulClient(rawClient);
+	}
 
 	@Override
 	public String serviceDiscory(String serviceName) {
-		String discoveryAddress = consulHost+":"+consulPort;
 		log.debug("Use consul to do service discovery: {}", discoveryAddress);
 		String[] address = discoveryAddress.split(":");
 		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));

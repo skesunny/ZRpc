@@ -1,14 +1,14 @@
-package com.honcz.zrpc.zrpcserver;
+package com.honcz.zrpc.zrpccore.rpccenter;
 
 import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
-import com.honcz.zrpc.zrpccore.consulservice.ConsulServiceRegistryImpl;
+import com.honcz.zrpc.zrpccore.config.ApplicationHelper;
+import com.honcz.zrpc.zrpccore.servicecenter.consulservice.ConsulServiceRegistryImpl;
 import com.honcz.zrpc.zrpcserialization.coder.RPCDecoder;
 import com.honcz.zrpc.zrpcserialization.coder.RPCEncoder;
 import com.honcz.zrpc.zrpcserialization.serialization.impl.ProtobufSerializer;
-import com.honcz.zrpc.zrpcserver.handler.RPCServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -22,6 +22,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -33,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Slf4j
-public class RPCServer implements ApplicationContextAware, InitializingBean {
+public class RPCServer implements InitializingBean {
 
     @NonNull
     private String serverIp;
@@ -44,26 +47,39 @@ public class RPCServer implements ApplicationContextAware, InitializingBean {
 
 	private Map<String, Object> handlerMap = new HashMap<>();
 
-	@Override
-	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-		log.info("Putting handler");
-		// Register handler
-		getServiceInterfaces(ctx)
-				.stream()
-				.forEach(interfaceClazz -> {
-					String serviceName = interfaceClazz.getAnnotation(ZRpcService.class).value().getName();
-					Object serviceBean = ctx.getBean(interfaceClazz);
-					handlerMap.put(serviceName, serviceBean);
-					log.debug("Put handler: {}, {}", serviceName, serviceBean);
-				});
-	}
+//	@Override
+//	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+//		log.info("Putting handler");
+//		// Register handler
+//		getServiceInterfaces(ctx)
+//				.stream()
+//				.forEach(interfaceClazz -> {
+//					String serviceName = interfaceClazz.getAnnotation(ZRpcService.class).value().getName();
+//					Object serviceBean = ctx.getBean(interfaceClazz);
+//					handlerMap.put(serviceName, serviceBean);
+//					log.debug("Put handler: {}, {}", serviceName, serviceBean);
+//				});
+//	}
+
+
+//	@Override
+//	public void onApplicationEvent(ContextRefreshedEvent event) {
+//		// 根容器为Spring容器
+//		if(event.getApplicationContext().getParent()==null) {
+//			ApplicationHelper
+//			handlerMap = event.getApplicationContext().getBeansWithAnnotation(ZRpcService.class);
+//			startServer();
+//		}
+//	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		handlerMap = ApplicationHelper.getBeansByAnnotion(ZRpcService.class);
 		startServer();
 	}
 
 	private void startServer() {
+
 		// Get ip and port
 		log.debug("Starting server on port: {}", serverPort);
 		EventLoopGroup bossGroup = new NioEventLoopGroup();

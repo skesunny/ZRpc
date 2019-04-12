@@ -2,10 +2,11 @@ package com.honcz.zrpc.zrpccore.servicehandler;
 
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
+import com.honcz.zrpc.zrpccore.config.ApplicationHelper;
 import com.honcz.zrpc.zrpccore.netty.ChannelManager;
 import com.honcz.zrpc.zrpccore.netty.RPCResponseFuture;
 import com.honcz.zrpc.zrpccore.netty.ResponseFutureManager;
-import com.honcz.zrpc.zrpccore.ServiceDiscovery;
+import com.honcz.zrpc.zrpccore.servicecenter.ServiceDiscovery;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.Data;
@@ -35,8 +36,6 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class ProxyFactoryBean implements FactoryBean<Object> {
 	private Class<?> type;
-
-	private ServiceDiscovery serviceDiscovery;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -129,6 +128,7 @@ public class ProxyFactoryBean implements FactoryBean<Object> {
 
 	private InetSocketAddress getServiceAddress(String targetServiceName) {
 		String serviceAddress = "";
+		ServiceDiscovery serviceDiscovery = (ServiceDiscovery) ApplicationHelper.getBean(ServiceDiscovery.class);
 		if (serviceDiscovery != null) {
 			serviceAddress = serviceDiscovery.serviceDiscory(targetServiceName);
 			log.debug("Get address: {} for service: {}", serviceAddress, targetServiceName);

@@ -2,8 +2,6 @@ package com.honcz.zrpc.zrpccore.servicehandler;
 
 import com.honcz.zrpc.zrpccore.annotation.EnableRPCClients;
 import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
-import com.honcz.zrpc.zrpccore.ServiceDiscovery;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
