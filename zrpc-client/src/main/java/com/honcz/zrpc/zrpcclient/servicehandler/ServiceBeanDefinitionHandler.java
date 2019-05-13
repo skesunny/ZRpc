@@ -1,6 +1,6 @@
-package com.honcz.zrpc.zrpccore.servicehandler;
+package com.honcz.zrpc.zrpcclient.servicehandler;
 
-import com.honcz.zrpc.zrpccore.annotation.EnableRPCClients;
+import com.honcz.zrpc.zrpcclient.annotation.EnableRPCClients;
 import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

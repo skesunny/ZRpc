@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpccore.rpccenter;
+package com.honcz.zrpc.zrpcserver.rpccenter;
 
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * Handle the RPC request
- *
+ * 实现ChannelHandler接口，自定义拆包/装包逻辑
  * 通过netty，拿到request并去注册中心找到request中的调用接口
  *
  * @author hongbin
@@ -27,19 +27,19 @@ public class RPCServerHandler extends SimpleChannelInboundHandler<RPCRequest> {
 
 	@Override
 	public void channelRead0(final ChannelHandlerContext ctx, RPCRequest request) throws Exception {
-		log.debug("Get request: {}", request);
+		log.info("Get request: {}", request);
 		RPCResponse response = new RPCResponse();
 		response.setRequestId(request.getRequestId());
 		try {
 			Object result = handleRequest(request);
 			response.setResult(result);
 		} catch (Exception e) {
-			log.warn("Get exception when hanlding request, exception: {}", e);
+			log.error("Get exception when hanlding request, exception: {}", e);
 			response.setException(e);
 		}
 		ctx.writeAndFlush(response).addListener(
 				(ChannelFutureListener) channelFuture -> {
-					log.debug("Sent response for request: {}", request.getRequestId());
+					log.info("Sent response for request: {}", request.getRequestId());
 				});
 	}
 

@@ -1,6 +1,6 @@
 package com.honcz.zrpc.zrpctestclient;
 
-import com.honcz.zrpc.zrpccore.annotation.EnableRPCClients;
+import com.honcz.zrpc.zrpcclient.annotation.EnableRPCClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

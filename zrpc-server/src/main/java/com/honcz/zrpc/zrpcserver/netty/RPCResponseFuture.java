@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpccore.netty;
+package com.honcz.zrpc.zrpcserver.netty;
 
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
 import lombok.Data;

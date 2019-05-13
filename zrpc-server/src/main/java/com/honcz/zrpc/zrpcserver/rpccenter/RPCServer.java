@@ -1,4 +1,4 @@
-package com.honcz.zrpc.zrpccore.rpccenter;
+package com.honcz.zrpc.zrpcserver.rpccenter;
 
 import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
@@ -18,13 +18,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -74,7 +69,10 @@ public class RPCServer implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		handlerMap = ApplicationHelper.getBeansByAnnotion(ZRpcService.class);
+		Map<String,Object> beanMap = ApplicationHelper.getBeansByAnnotion(ZRpcService.class);
+		for (Map.Entry<String, Object> entry : beanMap.entrySet()) {
+			handlerMap.put(entry.getValue().getClass().getInterfaces()[0].getName(),entry.getValue());
+		}
 		startServer();
 	}
 
@@ -100,7 +98,7 @@ public class RPCServer implements InitializingBean {
 			bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 			bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 
-			ChannelFuture future = bootstrap.bind(serverIp, serverPort).sync();
+			ChannelFuture future = bootstrap.bind(serverPort).sync();
 
 			registerServices();
 

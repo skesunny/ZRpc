@@ -29,4 +29,5 @@ public class ApplicationHelper implements ApplicationContextAware {
     public static Map<String, Object> getBeansByAnnotion(Class<? extends Annotation> clz){
         return applicationContext.getBeansWithAnnotation(clz);
     }
+
 }

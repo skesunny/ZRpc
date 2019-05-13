@@ -15,11 +15,6 @@ import java.util.ArrayList;
  */
 
 public class ConsulServiceRegistryImpl implements ServiceRegistry {
-	@Value("${spring.cloud.consul.host}")
-	private String consulHost;
-
-	@Value("${spring.cloud.consul.port}")
-	private String consulPort;
 
 	private ConsulClient consulClient;
 
@@ -33,9 +28,11 @@ public class ConsulServiceRegistryImpl implements ServiceRegistry {
 	@Override
 	public void serviceRegister(String serviceName, ServiceAddress serviceAddress) {
 		NewService newService = new NewService();
-		newService.setId(generateNewIdForService(serviceName, serviceAddress));
+		newService.setId(serviceName);
 		newService.setName(serviceName);
-		newService.setTags(new ArrayList<>());
+		ArrayList<String> tags = new ArrayList();
+		tags.add("urlprefix-/"+serviceName);
+		newService.setTags(tags);
 		newService.setAddress(serviceAddress.getIp());
 		newService.setPort(serviceAddress.getPort());
 

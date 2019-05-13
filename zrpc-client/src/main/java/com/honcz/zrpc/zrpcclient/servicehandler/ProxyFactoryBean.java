@@ -1,11 +1,11 @@
-package com.honcz.zrpc.zrpccore.servicehandler;
+package com.honcz.zrpc.zrpcclient.servicehandler;
 
+import com.honcz.zrpc.zrpcclient.netty.ChannelManager;
+import com.honcz.zrpc.zrpcclient.netty.RPCResponseFuture;
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
+import com.honcz.zrpc.zrpcclient.netty.ResponseFutureManager;
 import com.honcz.zrpc.zrpccore.config.ApplicationHelper;
-import com.honcz.zrpc.zrpccore.netty.ChannelManager;
-import com.honcz.zrpc.zrpccore.netty.RPCResponseFuture;
-import com.honcz.zrpc.zrpccore.netty.ResponseFutureManager;
 import com.honcz.zrpc.zrpccore.servicecenter.ServiceDiscovery;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -72,6 +72,7 @@ public class ProxyFactoryBean implements FactoryBean<Object> {
                 if (response.hasException()) {
                     throw response.getException();
                 } else {
+                	log.info(response.getRequestId()+"调用收到的响应为"+response.getResult());
                     return response.getResult();
                 }
             }
@@ -157,7 +158,7 @@ public class ProxyFactoryBean implements FactoryBean<Object> {
 
 		try {
 			// TODO: make timeout configurable
-			return rpcResponseFuture.get(1, TimeUnit.SECONDS);
+			return rpcResponseFuture.get(90, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			log.warn("Exception:", e);
 			return null;
