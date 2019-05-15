@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.honcz.Zrpc</groupId>
-            <artifactId>zrpc-common</artifactId>
+            <artifactId>zrpc-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

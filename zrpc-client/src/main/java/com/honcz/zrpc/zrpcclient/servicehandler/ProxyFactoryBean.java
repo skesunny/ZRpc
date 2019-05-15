@@ -125,7 +125,7 @@ public class ProxyFactoryBean implements FactoryBean<Object> {
 
 		try {
 			// TODO: make timeout configurable
-			return rpcResponseFuture.get(90, TimeUnit.SECONDS);
+			return rpcResponseFuture.get(10, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			log.warn("Exception:", e);
 			return null;

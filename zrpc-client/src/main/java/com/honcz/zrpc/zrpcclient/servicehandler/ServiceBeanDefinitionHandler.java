@@ -1,7 +1,7 @@
 package com.honcz.zrpc.zrpcclient.servicehandler;
 
 import com.honcz.zrpc.zrpcclient.annotation.EnableRPCClients;
-import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
+import com.honcz.zrpc.zrpccore.annotation.ZRpcService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -78,9 +78,12 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
      */
     private Set<String> getApiPackages() {
         //@EnableRPCClients注解的value路径数组
-        String[] basePackages = getMainClass().getAnnotation(EnableRPCClients.class).basePackages();
+        String[] basePackages = null;
         Set set = new HashSet<>();
-        Collections.addAll(set, basePackages);
+        if (getMainClass().getAnnotation(EnableRPCClients.class) != null) {
+            basePackages = getMainClass().getAnnotation(EnableRPCClients.class).basePackages();
+            Collections.addAll(set, basePackages);
+        }
         return set;
     }
 
