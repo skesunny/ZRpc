@@ -1,13 +1,8 @@
 package com.honcz.zrpc.zrpcserver.config;
 
-import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
-import com.honcz.zrpc.zrpccore.config.ApplicationHelper;
-import com.honcz.zrpc.zrpccore.servicecenter.consulservice.ConsulServiceDiscoveryImpl;
 import com.honcz.zrpc.zrpccore.servicecenter.consulservice.ConsulServiceRegistryImpl;
 import com.honcz.zrpc.zrpcserver.rpccenter.RPCServer;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,26 +27,20 @@ public class RegistryConfig {
 
     @Bean
     public ConsulServiceRegistryImpl getRegistryConsul() {
-        return new ConsulServiceRegistryImpl(consulHost+":"+consulPort);
+        return new ConsulServiceRegistryImpl(consulHost + ":" + consulPort);
     }
 
     @Bean
-    public RPCServer rpcServer(){
+    public RPCServer rpcServer() {
         InetAddress inet = null;
         try {
             inet = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        RPCServer rpcServer = new RPCServer(inet.getHostAddress(),Integer.valueOf(serverPort),getRegistryConsul());
+        RPCServer rpcServer = new RPCServer(inet.getHostAddress(), Integer.valueOf(serverPort), getRegistryConsul());
         return rpcServer;
     }
 
-    //    @DependsOn(value = "getDiscoveryConsul")
-//    @Bean
-//    public ServiceBeanDefinitionHandler getHandler(){
-//        ServiceBeanDefinitionHandler serviceBeanDefinitionHandler = new ServiceBeanDefinitionHandler();
-//        return serviceBeanDefinitionHandler;
-//    }
 
 }

@@ -42,30 +42,6 @@ public class RPCServer implements InitializingBean {
 
 	private Map<String, Object> handlerMap = new HashMap<>();
 
-//	@Override
-//	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-//		log.info("Putting handler");
-//		// Register handler
-//		getServiceInterfaces(ctx)
-//				.stream()
-//				.forEach(interfaceClazz -> {
-//					String serviceName = interfaceClazz.getAnnotation(ZRpcService.class).value().getName();
-//					Object serviceBean = ctx.getBean(interfaceClazz);
-//					handlerMap.put(serviceName, serviceBean);
-//					log.debug("Put handler: {}, {}", serviceName, serviceBean);
-//				});
-//	}
-
-
-//	@Override
-//	public void onApplicationEvent(ContextRefreshedEvent event) {
-//		// 根容器为Spring容器
-//		if(event.getApplicationContext().getParent()==null) {
-//			ApplicationHelper
-//			handlerMap = event.getApplicationContext().getBeansWithAnnotation(ZRpcService.class);
-//			startServer();
-//		}
-//	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -73,6 +49,7 @@ public class RPCServer implements InitializingBean {
 		for (Map.Entry<String, Object> entry : beanMap.entrySet()) {
 			handlerMap.put(entry.getValue().getClass().getInterfaces()[0].getName(),entry.getValue());
 		}
+
 		startServer();
 	}
 

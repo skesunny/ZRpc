@@ -90,39 +90,6 @@ public class ProxyFactoryBean implements FactoryBean<Object> {
 		return true;
 	}
 
-//	private Object doInvoke(Object proxy, Method method, Object[] args) throws Throwable {
-//	    log.info("开始代理发现服务，发送请求过程");
-//		String targetServiceName = type.getName();
-//
-//		// Create request
-//		RPCRequest request = RPCRequest.builder()
-//				.requestId(generateRequestId(targetServiceName))
-//				.interfaceName(method.getDeclaringClass().getName())
-//				.methodName(method.getName())
-//				.parameters(args)
-//				.parameterTypes(method.getParameterTypes()).build();
-//
-//		// Get service address
-//		InetSocketAddress serviceAddress = getServiceAddress(targetServiceName);
-//
-//		// Get channel by service address
-//		Channel channel = ChannelManager.getInstance().getChannel(serviceAddress);
-//		if (null == channel) {
-//			throw new RuntimeException("Cann't get channel for address" + serviceAddress);
-//		}
-//
-//		// Send request
-//		RPCResponse response = sendRequest(channel, request);
-//		if (response == null) {
-//			throw new RuntimeException("response is null");
-//		}
-//		if (response.hasException()) {
-//			throw response.getException();
-//		} else {
-//			return response.getResult();
-//		}
-//	}
-
 	private String generateRequestId(String targetServiceName) {
 		return targetServiceName + "-" + UUID.randomUUID().toString();
 	}
