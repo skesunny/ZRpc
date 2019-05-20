@@ -1,6 +1,6 @@
 package com.honcz.zrpc.zrpcapi;
 
-import com.honcz.zrpc.zrpccore.annotation.ZRpcService;
+import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
 
 /**
  * @author honc.z

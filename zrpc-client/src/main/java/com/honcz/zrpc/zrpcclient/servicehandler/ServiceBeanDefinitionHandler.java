@@ -1,7 +1,7 @@
 package com.honcz.zrpc.zrpcclient.servicehandler;
 
-import com.honcz.zrpc.zrpcclient.annotation.EnableRPCClients;
-import com.honcz.zrpc.zrpccore.annotation.ZRpcService;
+import com.honcz.zrpc.zrpcclient.annotation.EnableZRPCClients;
+import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -39,7 +38,6 @@ import java.util.Set;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostProcessor {
 //    @NonNull
 //    private ServiceDiscovery serviceDiscovery;
@@ -80,8 +78,8 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
         //@EnableRPCClients注解的value路径数组
         String[] basePackages = null;
         Set set = new HashSet<>();
-        if (getMainClass().getAnnotation(EnableRPCClients.class) != null) {
-            basePackages = getMainClass().getAnnotation(EnableRPCClients.class).basePackages();
+        if (getMainClass().getAnnotation(EnableZRPCClients.class) != null) {
+            basePackages = getMainClass().getAnnotation(EnableZRPCClients.class).basePackages();
             Collections.addAll(set, basePackages);
         }
         return set;

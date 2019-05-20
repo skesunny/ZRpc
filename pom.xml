@@ -20,9 +20,10 @@
         <module>zrpc-core</module>
         <module>zrpc-test</module>
         <module>zrpc-serialization</module>
-        <module>zrpc-loadbalance</module>
         <module>zrpc-client</module>
         <module>zrpc-server</module>
+        <module>zrpc-registry</module>
+        <module>zrpc-springboot-starter</module>
     </modules>
 
     <dependencyManagement>

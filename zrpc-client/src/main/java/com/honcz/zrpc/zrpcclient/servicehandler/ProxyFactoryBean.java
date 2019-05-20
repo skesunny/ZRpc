@@ -5,13 +5,15 @@ import com.honcz.zrpc.zrpcclient.netty.RPCResponseFuture;
 import com.honcz.zrpc.zrpccommon.model.RPCRequest;
 import com.honcz.zrpc.zrpccommon.model.RPCResponse;
 import com.honcz.zrpc.zrpcclient.netty.ResponseFutureManager;
-import com.honcz.zrpc.zrpccore.config.ApplicationHelper;
-import com.honcz.zrpc.zrpccore.servicecenter.ServiceDiscovery;
+import com.honcz.zrpc.zrpccommon.util.ApplicationHelper;
+import com.honcz.zrpc.zrpcregistry.servicecenter.ServiceDiscovery;
+import com.honcz.zrpc.zrpcregistry.servicecenter.consulservice.ConsulServiceDiscoveryImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 
@@ -36,6 +38,9 @@ import java.util.concurrent.TimeUnit;
 @Data
 public class ProxyFactoryBean implements FactoryBean<Object> {
 	private Class<?> type;
+
+	@Autowired
+	private ConsulServiceDiscoveryImpl consulServiceDiscovery;
 
 	@SuppressWarnings("unchecked")
 	@Override
