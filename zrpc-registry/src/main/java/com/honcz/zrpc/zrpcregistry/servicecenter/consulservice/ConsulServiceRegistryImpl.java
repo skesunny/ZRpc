@@ -5,7 +5,6 @@ import com.ecwid.consul.v1.ConsulRawClient;
 import com.ecwid.consul.v1.agent.model.NewService;
 import com.honcz.zrpc.zrpccommon.model.ServiceAddress;
 import com.honcz.zrpc.zrpcregistry.servicecenter.ServiceRegistry;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,6 @@ public class ConsulServiceRegistryImpl implements ServiceRegistry {
 	private ConsulClient consulClient;
 
 	public ConsulServiceRegistryImpl(String consulAddress) {
-//		String consulAddress = consulHost+":"+consulPort;
 		String address[] = consulAddress.split(":");
 		ConsulRawClient rawClient = new ConsulRawClient(address[0], Integer.valueOf(address[1]));
 		consulClient = new ConsulClient(rawClient);

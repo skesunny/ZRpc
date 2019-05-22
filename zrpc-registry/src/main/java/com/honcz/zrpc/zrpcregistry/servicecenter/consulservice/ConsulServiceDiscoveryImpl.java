@@ -23,11 +23,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Data
 public class ConsulServiceDiscoveryImpl implements ServiceDiscovery {
-//	@Value("${spring.cloud.consul.host}")
-//	private String consulHost;
-//
-//	@Value("${spring.cloud.consul.port}")
-//	private String consulPort;
 
 	public String discoveryAddress;
 

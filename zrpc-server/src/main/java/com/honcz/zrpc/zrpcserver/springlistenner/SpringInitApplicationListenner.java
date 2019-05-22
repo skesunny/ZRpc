@@ -24,6 +24,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author honc.z
@@ -31,7 +32,7 @@ import java.util.Map;
  */
 @Slf4j
 public class SpringInitApplicationListenner implements ApplicationListener<ContextRefreshedEvent> {
-    private Map<String, Object> handlerMap = new HashMap<>();
+    private Map<String, Object> handlerMap = new ConcurrentHashMap<>();
 
     @Autowired
     private RPCServer rpcServer;
@@ -53,56 +54,9 @@ public class SpringInitApplicationListenner implements ApplicationListener<Conte
             threadPoolTaskExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    startServer();
+                    rpcServer.startServer(handlerMap);
                 }
             });
-        }
-//        startServer();
-    }
-
-    private void startServer() {
-
-        // Get ip and port
-        log.debug("Starting server on port: {}", rpcServer.serverPort);
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel channel) throws Exception {
-                            ChannelPipeline pipeline = channel.pipeline();
-                            pipeline.addLast(new RPCDecoder(RPCRequest.class, new ProtobufSerializer()));
-                            pipeline.addLast(new RPCEncoder(RPCResponse.class, new ProtobufSerializer()));
-                            pipeline.addLast(new RPCServerHandler(handlerMap));
-                        }
-                    });
-            bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
-            bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
-
-            ChannelFuture future = bootstrap.bind(rpcServer.serverPort).sync();
-
-            registerServices();
-
-            log.info("ZRPCServer started");
-
-            future.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Server shutdown!", e);
-        } finally {
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
-        }
-    }
-
-    private void registerServices() {
-        if (rpcServer.serviceRegistry != null) {
-            for (String interfaceName : handlerMap.keySet()) {
-                rpcServer.serviceRegistry.serviceRegister(interfaceName, new ServiceAddress(rpcServer.serverIp, rpcServer.serverPort));
-                log.info("Registering service: {} with address: {}:{}", interfaceName, rpcServer.serverIp, rpcServer.serverPort);
-            }
         }
     }
 }

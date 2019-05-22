@@ -2,6 +2,7 @@ package com.honcz.zrpc.zrpcclient.servicehandler;
 
 import com.honcz.zrpc.zrpcclient.annotation.EnableZRPCClients;
 import com.honcz.zrpc.zrpccommon.annotation.ZRpcService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -39,8 +40,8 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostProcessor {
-//    @NonNull
-//    private ServiceDiscovery serviceDiscovery;
+    @NonNull
+    private RPCClient rpcClient;
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
@@ -110,7 +111,7 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
         BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(ProxyFactoryBean.class);
         String beanName = StringUtils.uncapitalize(className.substring(className.lastIndexOf('.') + 1));
         definition.addPropertyValue("type", className);
-//        definition.addPropertyValue("serviceDiscovery", serviceDiscovery);
+        definition.addPropertyValue("rpcClient", rpcClient);
 
         return new BeanDefinitionHolder(definition.getBeanDefinition(), beanName);
     }

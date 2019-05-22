@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan(value = "com.honcz")
-@EnableZRPCClients(basePackages = "com.honcz.zrpc.zrpcapi")
 @Slf4j
 public class ZrpcServerApplication {
     public static void main(String[] args) {
