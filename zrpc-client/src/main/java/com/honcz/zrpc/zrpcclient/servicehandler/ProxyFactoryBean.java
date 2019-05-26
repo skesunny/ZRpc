@@ -1,5 +1,6 @@
 package com.honcz.zrpc.zrpcclient.servicehandler;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.FactoryBean;
  */
 @Slf4j
 @Data
+@AllArgsConstructor
 public class ProxyFactoryBean implements FactoryBean<Object> {
     private Class<?> type;
 
