@@ -52,7 +52,9 @@ public class RPCServer {
                             pipeline.addLast(new RPCServerHandler(handlerMap));
                         }
                     });
+            //tcp/ip协议参数，设置链接队列大小
             bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
+            //tcp/ip协议参数，测试链接的状态，这个选项用于可能长时间没有数据交流的
             bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
 
             ChannelFuture future = bootstrap.bind(serverPort).sync();
