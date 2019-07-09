@@ -16,7 +16,6 @@ import org.springframework.beans.factory.FactoryBean;
  */
 @Slf4j
 @Data
-@AllArgsConstructor
 public class ProxyFactoryBean implements FactoryBean<Object> {
     private Class<?> type;
 

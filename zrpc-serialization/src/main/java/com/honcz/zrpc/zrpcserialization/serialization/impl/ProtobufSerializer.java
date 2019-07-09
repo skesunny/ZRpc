@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author hongbin
  * Created on 21/10/2017
+ *
+ * Protobuf协议进行加码写码
  */
 public class ProtobufSerializer implements Serializer {
 
