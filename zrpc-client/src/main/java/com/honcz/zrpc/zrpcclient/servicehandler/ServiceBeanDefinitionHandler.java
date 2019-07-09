@@ -116,6 +116,10 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
         return new BeanDefinitionHolder(definition.getBeanDefinition(), beanName);
     }
 
+    /**
+     * 重写扫描器逻辑，扫描条件为：1.必须是顶级类；2.必须是接口；3.必须
+     * @return
+     */
     private ClassPathScanningCandidateComponentProvider getScanner() {
         return new ClassPathScanningCandidateComponentProvider(false) {
             @Override
@@ -124,12 +128,10 @@ public class ServiceBeanDefinitionHandler implements BeanDefinitionRegistryPostP
                     if (beanDefinition.getMetadata().isInterface()
                             && beanDefinition.getMetadata().getInterfaceNames().length == 1
                             && Annotation.class.getName().equals(beanDefinition.getMetadata().getInterfaceNames()[0])) {
-
                         try {
                             Class<?> target = Class.forName(beanDefinition.getMetadata().getClassName());
                             return !target.isAnnotation();
                         } catch (Exception ex) {
-
                             log.error("Could not load target class: {}, {}",
                                     beanDefinition.getMetadata().getClassName(), ex);
                         }
